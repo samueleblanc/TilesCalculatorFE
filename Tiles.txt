@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+   <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="faviconFE.png">
+        <style type="text/css">
+            body {
+                margin-left: 8%;
+                margin-right: 8%;
+                margin-top: 1%;
+                margin-bottom: 3%
+            }
+            label {
+                font-size: 17px;
+                font-family: Arial, Helvetica, sans-serif;
+                margin-top: 0.5%;
+            }
+            select {
+                font-size: 17px;
+                font-family: Arial, Helvetica, sans-serif;
+                margin-top: 1%;
+                transition-duration: 0.3s;
+                border: 1px solid black;
+                border-radius: 2px;
+                background-color: white;
+            }
+            select:hover {
+                font-size: 17px;
+                font-family: Arial, Helvetica, sans-serif;
+                margin-top: 1%;
+                border: 1px solid #a9121d;
+                border-radius: 2px;
+                background-color: white;
+                cursor: pointer;
+            }
+            option {
+                font-size: 17px;
+                font-family: Arial, Helvetica, sans-serif;
+                margin-top: 0.5%;
+                transition-duration: 0.3s;
+                background-color: white;
+            }
+            option:hover {
+                font-size: 17px;
+                font-family: Arial, Helvetica, sans-serif;
+                margin-top: 0.5%;
+                cursor: pointer;
+                background-color: #a9121d;
+            }
+            #answer {
+                font-size: 17px;
+                font-family: Arial, Helvetica, sans-serif;
+                margin-top: 0.5%;
+                width: 70px;
+                text-align: center;
+            }
+            #button {
+                font-size: 17px;
+                font-family: Arial, Helvetica, sans-serif;
+                margin-top: 0.5%;
+                width: 90px;
+                height: 30px;
+                text-align: center;
+                border: 2px grey solid;
+                border-radius: 7px;
+                background-color: white;
+                transition-duration: 0.3s;
+            }
+            #button:hover {
+                cursor: pointer;
+                border-radius: 7px;
+                border: 2px #a9121d solid;
+            }
+            h2 {
+                font-size: 28px;
+                font-family: Arial, Helvetica, sans-serif;
+                font-weight: 700;
+                text-align: center;
+                cursor: context-menu;
+            }
+            h3 {
+                font-size: 20px;
+                font-family: Arial, Helvetica, sans-serif;
+                font-weight: 700;
+                cursor: context-menu;
+            }
+            #R, #TM {
+                font-size: 15px;
+            }
+            #tilesimg {
+                width: 43%;
+                height: 43%;
+                margin-bottom: 2%;
+                transition-duration: 0.2s;
+                border: 2px white solid;
+                border-radius: 7px;
+            }
+            #tilesimg:hover {
+                width: 43%;
+                height: 43%;
+                margin-bottom: 2%;
+                border: 2px #a9121d solid;
+                border-radius: 7px;
+                cursor: pointer;
+            }
+            #prixtotal {
+                font-size: 17.5px;
+                font-weight: bold;
+            }
+            #total {
+                font-size: 17px;
+                font-family: Arial, Helvetica, sans-serif;
+                margin-top: 0.5%;
+                width: 90px;
+                text-align: center;
+                border: 1px rgb(24, 24, 24) solid;
+                border-radius: 4px;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            .column {
+                float: left;
+                padding: 10px;
+            }
+            .left {
+                width: 45%;
+                margin-left: 10%;
+            }
+            .right {
+                width: 45%;
+            }
+            .row:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+            #pric {
+                display: table;
+            }
+            p {
+                display: table-row;
+            }
+            .prixlab {
+                display: table-cell;
+            }
+            .prixinp {
+                display: table-cell;
+                font-size: 17px;
+                font-family: Arial, Helvetica, sans-serif;
+                width: 70px;
+                text-align: center;
+            }
+        </style>
+        <script type="text/javascript">
+            function compute() {
+                let long = document.dimension.longueur.value;
+                let larg = document.dimension.largeur.value;
+                let unit = document.dimension.unit.value;
+                let price = document.dimension.price.value;
+                let num1N, num2N, borders, tiles, centers;
+                let num1 = parseFloat(long);
+                let num2 = parseFloat(larg);
+                let cout = parseFloat(price);
+
+                // Detect mistakes
+                if ((num1 * 0) != 0)
+                {
+                    document.dimension.longueur.value = "";
+                    alert('Entrez un chiffre');
+                }
+                if ((num2 * 0) != 0)
+                {
+                    document.dimension.largeur.value = "";
+                    alert('Entrez un chiffre');
+                }
+                if (num1 != long)
+                {
+                    num1 = parseFloat(long.replace(",", "."));
+                }
+                if (num2 != larg)
+                {
+                    num2 = parseFloat(larg.replace(",", "."));
+                }
+                if (price != cout)
+                {
+                    cout = parseFloat(price.replace(",", "."));
+                }
+                if (isNaN(cout))
+                {
+                    cout = 0;
+                }
+
+                // Convert units
+                if (unit == "foot"){
+                num1 = Math.ceil(num1);
+                num2 = Math.ceil(num2);
+                }
+                else if (unit == "inch") {
+                num1 = Math.ceil(num1 / 12);
+                num2 = Math.ceil(num2 / 12);
+                }
+                else if (unit == "cm"){
+                num1 = Math.ceil(num1 / 30.48);
+                num2 = Math.ceil(num2 / 30.48);
+                }
+                else if (unit == "meter") {
+                num1 = Math.ceil(num1 * 3.281);
+                num2 = Math.ceil(num2 * 3.281);
+                }
+                else{
+                alert("Choisissez une unité.")
+                }
+
+                // Even length
+                if (num1 % 2 == 0) {
+                num1N = num1;}
+                else{
+                    num1N = num1 + 1;
+                }
+
+                if (num2 % 2 == 0) {
+                num2N = num2;}
+                else{
+                    num2N = num2 + 1;
+                }
+
+                let area = num1N * num2N;
+                borders = (num1N - 4) + (num2N - 4);
+                tiles = area / 4;
+                centers = (tiles - borders) - 4;
+
+                if (area > 8) {
+                    document.dimension.total.value = area;
+                    document.dimension.TileTotal.value = tiles;
+                    document.dimension.Corners.value = "4";
+                    document.dimension.Borders.value = borders;
+                    document.dimension.Centers.value = centers;
+                }
+                else if (area == 8) {
+                    document.dimension.total.value = area;
+                    document.dimension.TileTotal.value = "2";
+                    document.dimension.Corners.value = "0";
+                    document.dimension.Borders.value = "0";
+                    document.dimension.Centers.value = "2";
+                }
+                else if (area == 4) {
+                    document.dimension.total.value = area;
+                    document.dimension.TileTotal.value = "1";
+                    document.dimension.Corners.value = "0";
+                    document.dimension.Borders.value = "0";
+                    document.dimension.Centers.value = "1";
+                }
+                
+                // Price
+                let cout_avant = cout * tiles;
+                let tps = cout_avant * 0.05;
+                let tvq = cout_avant * 0.09975;
+                let cout_total = tps + tvq + cout_avant;
+                document.prix.prixstx.value = cout_avant.toFixed(2);
+                document.prix.tps.value = tps.toFixed(2);
+                document.prix.tvq.value = tvq.toFixed(2);
+                document.prix.prixtotal.value = cout_total.toFixed(2) + " $";
+                }
+            
+            document.querySelectorAll(".formReset").forEach(function(reset){
+                reset.addEventListener("click",resetForm);  
+            });
+            function resetForm() {
+                document.getElementById("dims").reset();
+                document.getElementById("pric").reset();
+            }
+        </script>
+    <title>Fitness L'Entrepôt REGUPOL® AKTIVLOK™ Tile Calculator</title>
+   </head>
+   <body>
+       <header><img src="logoFE.png"><h2>Fitness L'Entrepôt REGUPOL<sup id="R">®</sup> AKTIVLOK<sup id="TM">TM</sup> Tile Calculator</h2></header>
+	<br><br>
+    <div class="row">
+    <div class="column left">
+	<form name="dimension" id="dims">
+    <label>Prix à l'unité</label>&nbsp;
+        <input type="text" name="price" id="answer" placeholder="$"><br>
+    <label for="unit">Selectionne une unité</label>&nbsp;
+    <select name="unit">
+        <option value="foot">Pied</option>
+        <option value="inch">Pouce</option>
+        <option value="cm">Centimètre</option>
+        <option value="meter">Mètre</option>
+    </select>
+    <h3>Dimensions de la pièce:</h3>
+    <table>
+        <tr>
+            <td><label>Longueur</label></td>
+            <td><input type="text" name="longueur" id="answer"></td>
+        </tr>
+        <tr>
+            <td><label>Largeur</label></td>
+            <td><input type="text" name="largeur" id="answer"></td>
+        </tr>
+    </table>
+    <br>
+    <input type="button" value="Calculer" id="button" onClick="compute()">
+    <input type="button" value="Reset" id="button" onClick="resetForm()"> <br><br><br>
+    <table>
+        <tr>
+            <td><label>Aire requise (pieds carrés)</label></td>
+            <td><input type="text" name="total" id="answer" disabled/></td>
+        </tr>
+        <tr>
+            <td><label>Nombre de tuiles requises</label></td>
+            <td><input type="text" name="TileTotal" id="answer" disabled/></td>
+        </tr>
+    </table> <br>
+    <table>
+        <tr>
+            <td><label>Nombre de coins</label></td>
+            <td><input type="text" name="Corners" id="answer" disabled/></td>
+        </tr>
+        <tr>
+            <td><label>Nombre de côtés</label></td>
+            <td><input type="text" name="Borders" id="answer" disabled/></td>
+        </tr>
+        <tr>
+            <td><label>Nombre de centres</label></td>
+            <td><input type="text" name="Centers" id="answer" disabled/></td>
+        </tr>
+    </table>
+   </form>
+   </div>
+   <div class="column right">
+    <a href="https://fitnessentrepot.com/produit/matelas-regupol-2-x-2/" target="_blank"><img src="Matelas_Regupol.jpg" id="tilesimg"></a><br>
+   <h3>Prix</h3>
+   <form name="prix" id="pric">
+    <table>
+        <tr>
+            <td><label class="prixlab">Coût</label></td>
+            <td><input type="text" name="prixstx" class="prixinp" disabled></td>
+        </tr>
+        <tr>
+            <td><label class="prixlab">TPS</label></td>
+            <td><input type="text" name="tps" class="prixinp" disabled></td>
+        </tr>
+        <tr>
+            <td><label class="prixlab">TVQ</label></td>
+            <td><input type="text" name="tvq" class="prixinp" disabled></td>
+        </tr>
+        <tr>
+            <td><label id="prixtotal" class="prixlab">Total</label></td>
+            <td><input type="text" name="prixtotal" id="total" class="prixinp" disabled></td>
+        </tr>
+    </table>
+    </form>
+   </div>
+    </div>
+   </body>
+</html>
